@@ -30,7 +30,7 @@ def validate_image(image_bytes: bytes, content_type: str) -> tuple[bool, str]:
         return False, "Image size exceeds 5MB limit"
     
     if content_type not in ALLOWED_MIME_TYPES:
-        return False, f"Invalid image type. Allowed: JPG, PNG, WEBP"
+        return False, "Invalid image type. Allowed: JPG, PNG, WEBP"
     
     try:
         img = Image.open(BytesIO(image_bytes))
