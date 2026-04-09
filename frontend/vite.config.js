@@ -14,12 +14,9 @@ export default defineConfig({
       '.preview.emergentcf.cloud'
     ],
     hmr: {
-      // Disable HMR to prevent reconnection issues causing redirects
-      overlay: false
-    },
-    watch: {
-      // Reduce file watching frequency
-      usePolling: false
+      // Use WebSocket on same port to avoid cross-origin issues
+      clientPort: 443,
+      protocol: 'wss'
     }
   }
 })
