@@ -1,16 +1,17 @@
-# JanVoice AI - Multimodal Vision-Language Feature PRD
+# JanVoice AI - Project Requirements Document
 
 ## Original Problem Statement
-Enhancement to add Multimodal Vision-Language AI Feature for IMAGE-BASED COMPLAINT ANALYSIS using Vision-Language Model (VLM).
+AI-powered Civic Grievance Platform with Multimodal Vision-Language capabilities for IMAGE-BASED COMPLAINT ANALYSIS.
 
 ## Architecture
-- **Frontend**: React + Vite + TailwindCSS
+- **Frontend**: React + Vite + TailwindCSS (Production build in /root)
 - **Backend**: FastAPI + SQLAlchemy (SQLite)
 - **AI Integration**: Google Gemini Vision API via emergentintegrations library
 - **Image Processing**: Pillow for validation and resizing
+- **Geo Services**: OpenStreetMap Nominatim (free fallback)
 
 ## User Personas
-1. **Citizens**: Upload images of civic issues (garbage, potholes, water leaks) for auto-analysis
+1. **Citizens**: Upload images of civic issues for auto-analysis and complaint submission
 2. **Government Officials**: Review AI-classified complaints with confidence scores
 
 ## Core Requirements (Static)
@@ -23,7 +24,7 @@ Enhancement to add Multimodal Vision-Language AI Feature for IMAGE-BASED COMPLAI
 7. Error handling for unclear images
 8. Confidence score display
 
-## What's Been Implemented (Jan 2026)
+## What's Been Implemented (Apr 2026)
 
 ### Backend
 - [x] POST `/api/ai/analyze-image` endpoint
@@ -31,6 +32,7 @@ Enhancement to add Multimodal Vision-Language AI Feature for IMAGE-BASED COMPLAI
 - [x] Gemini Vision integration via emergentintegrations
 - [x] JSON response with description, department, category, confidence
 - [x] Error handling for invalid/unclear images
+- [x] Free Nominatim fallback for geo/places API
 
 ### Frontend
 - [x] "AI ANALYSIS FROM IMAGE" section on Raise Complaint page
@@ -38,7 +40,23 @@ Enhancement to add Multimodal Vision-Language AI Feature for IMAGE-BASED COMPLAI
 - [x] Image preview with loading indicator
 - [x] Auto-fill form fields after analysis
 - [x] Success/error message display
-- [x] 5MB limit enforcement client-side
+- [x] Session persistence fixes (HMR configuration)
+
+### Custom Domain Setup
+- [x] Production build files in `/root/`
+- [x] index.html with SEO meta tags
+- [x] favicon.svg
+- [x] API auto-detection for custom domains
+
+## Custom Domain Files (/root/)
+```
+/root/
+├── index.html          # Main entry point with SEO
+├── favicon.svg         # App favicon
+└── assets/
+    ├── index-*.js      # Bundled JavaScript
+    └── index-*.css     # Bundled CSS
+```
 
 ## API Response Format
 ```json
@@ -50,6 +68,11 @@ Enhancement to add Multimodal Vision-Language AI Feature for IMAGE-BASED COMPLAI
 }
 ```
 
+## Fixes Applied
+1. Visual error after submit - Removed undefined `aiAssistant.insights` references
+2. Login redirect issue - Fixed HMR WebSocket configuration
+3. Geo API 503 - Added free Nominatim fallback
+
 ## Backlog / Future Features
 - P0: None
 - P1: 
@@ -60,6 +83,7 @@ Enhancement to add Multimodal Vision-Language AI Feature for IMAGE-BASED COMPLAI
   - Historical image comparison
 
 ## Next Tasks
-1. Add more comprehensive error messages for different failure modes
-2. Add loading skeleton during image analysis
-3. Implement batch image upload
+1. ~~Configure custom domain DNS settings~~ (User task)
+2. ~~Set up SSL for custom domain~~ (Handled by hosting)
+3. Add loading skeleton during image analysis
+4. Implement batch image upload
