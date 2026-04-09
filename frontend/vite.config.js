@@ -12,6 +12,14 @@ export default defineConfig({
       '127.0.0.1',
       '.preview.emergentagent.com',
       '.preview.emergentcf.cloud'
-    ]
+    ],
+    hmr: {
+      // Disable HMR to prevent reconnection issues causing redirects
+      overlay: false
+    },
+    watch: {
+      // Reduce file watching frequency
+      usePolling: false
+    }
   }
 })

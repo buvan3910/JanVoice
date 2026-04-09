@@ -120,16 +120,23 @@ function AppContent({ isAuthenticated, setIsAuthenticated, theme, toggleTheme, l
 }
 
 function App() {
-  // Force rebuild comment
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light');
-  const [language, setLanguage] = useState(localStorage.getItem('language') || 'English');
+  // Initialize from localStorage immediately to prevent flash of unauthenticated state
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    const user = localStorage.getItem('user');
+    return !!user;
+  });
+  const [theme, setTheme] = useState(() => localStorage.getItem('theme') || 'light');
+  const [language, setLanguage] = useState(() => localStorage.getItem('language') || 'English');
 
   useEffect(() => {
-    const user = localStorage.getItem('user');
-    if (user) {
-      setIsAuthenticated(true);
-    }
+    // Re-check auth state on mount and storage events
+    const checkAuth = () => {
+      const user = localStorage.getItem('user');
+      setIsAuthenticated(!!user);
+    };
+    
+    // Listen for storage changes (e.g., from other tabs)
+    window.addEventListener('storage', checkAuth);
     
     // Initialize Citizen Score if not exists
     if (!localStorage.getItem('citizenScore')) {
@@ -143,6 +150,8 @@ function App() {
       document.documentElement.classList.remove('dark');
     }
     localStorage.setItem('theme', theme);
+    
+    return () => window.removeEventListener('storage', checkAuth);
   }, [theme]);
 
   const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
