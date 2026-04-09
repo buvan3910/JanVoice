@@ -982,7 +982,7 @@ const RaiseComplaint = ({ language }) => {
                       <div>
                         <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest mb-1">{language === 'Kannada' ? 'ವಿವರಣೆ' : 'Description'}</p>
                         <p className="text-[10px] text-slate-600 dark:text-slate-400 leading-relaxed font-medium italic">
-                          {aiAssistant.insights?.refinedVersion || formData.description}
+                          {formData.description}
                         </p>
                       </div>
                       <div className="grid grid-cols-2 gap-6 pt-6">
@@ -1017,7 +1017,6 @@ const RaiseComplaint = ({ language }) => {
                 </button>
                 <button 
                   onClick={() => {
-                    if (aiAssistant.insights) setFormData(prev => ({ ...prev, description: aiAssistant.insights.refinedVersion }));
                     setShowPreview(false);
                   }}
                   className="flex-1 py-4 bg-gov-blue-600 text-white rounded-2xl font-black text-sm uppercase tracking-widest hover:bg-gov-blue-700 transition-all shadow-lg shadow-gov-blue-200 dark:shadow-none"

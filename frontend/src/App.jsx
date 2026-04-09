@@ -26,7 +26,9 @@ function AppContent({ isAuthenticated, setIsAuthenticated, theme, toggleTheme, l
   const location = useLocation();
 
   const ProtectedRoute = ({ children }) => {
-    if (!isAuthenticated) {
+    // Double-check localStorage directly to handle HMR edge cases
+    const hasUser = localStorage.getItem('user');
+    if (!isAuthenticated && !hasUser) {
       return <Navigate to="/login" replace />;
     }
     return children;
@@ -138,6 +140,14 @@ function App() {
     // Listen for storage changes (e.g., from other tabs)
     window.addEventListener('storage', checkAuth);
     
+    // Re-check auth when tab becomes visible (handles HMR edge cases)
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        checkAuth();
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
     // Initialize Citizen Score if not exists
     if (!localStorage.getItem('citizenScore')) {
       localStorage.setItem('citizenScore', '750');
@@ -151,7 +161,10 @@ function App() {
     }
     localStorage.setItem('theme', theme);
     
-    return () => window.removeEventListener('storage', checkAuth);
+    return () => {
+      window.removeEventListener('storage', checkAuth);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
   }, [theme]);
 
   const toggleTheme = () => setTheme(prev => prev === 'light' ? 'dark' : 'light');
