@@ -1,6 +1,9 @@
-// Default to 8002 because this project runs multiple local servers during dev.
-// You can override with VITE_API_BASE_URL.
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://127.0.0.1:8002';
+// API Base URL - uses window.location.origin for custom domain support
+// Falls back to env variable or localhost for development
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 
+  (typeof window !== 'undefined' && window.location.hostname !== 'localhost' 
+    ? window.location.origin + '/api' 
+    : 'http://127.0.0.1:8002');
 
 async function request(path, options = {}) {
   const res = await fetch(`${API_BASE_URL}${path}`, {
